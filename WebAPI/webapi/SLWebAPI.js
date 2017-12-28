@@ -1,6 +1,6 @@
 
 export default class SLWebAPI {
-    constructor(baseUrl = '', { headers = {}, devMode = false, simulatedDelay = 0 } = {}) {
+    constructor(baseUrl = '', { headers = {}} = {}) {
         if (!baseUrl) throw new Error('missing baseUrl');
         this.headers = {
             'Accept': 'application/json',
@@ -12,31 +12,48 @@ export default class SLWebAPI {
     getFullURL(url) {
         return `${this.baseUrl}${url}`;
     }
-
-    fetch(route, method, body, isQuery = false) {
-        if (!route) throw new Error('Route is undefined');
+    
+    GET(route) { 
         var fullRoute = this.getFullURL(route);
-        if (isQuery && body) {
-            var qs = require('qs');
-            const query = qs.stringify(body);
-            fullRoute = `${fullRoute}?${query}`;
-            body = undefined;
-        }
         let opts = {
-            method,
+            method :'GET',
             headers: this.headers
         };
-        if (body) {
-            Object.assign(opts, { body: JSON.stringify(body) });
-        }
-        const fetchPromise = () => fetch(fullRoute, opts);
-        
+        const fetchPromise = () => fetch(fullRoute, opts);        
+        return fetchPromise()
+            .then(response => response.json());        
+    }
+    POST(route, body) { 
+        var fullRoute = this.getFullURL(route);
+        let opts = {
+            method :'POST',
+            headers: this.headers
+        };
+        Object.assign(opts, { body: JSON.stringify(body) });
+        const fetchPromise = () => fetch(fullRoute, opts);        
+        return fetchPromise()
+            .then(response => response.json());        
+    }
+    PUT(route, body) { 
+        var fullRoute = this.getFullURL(route);
+        let opts = {
+            method :'PUT',
+            headers: this.headers
+        };
+        Object.assign(opts, { body: JSON.stringify(body) });
+        const fetchPromise = () => fetch(fullRoute, opts);        
+        return fetchPromise()
+            .then(response => response.json());        
+    }
+    DELETE(route) { 
+        var fullRoute = this.getFullURL(route);
+        let opts = {
+            method :'DELETE',
+            headers: this.headers
+        };
+        const fetchPromise = () => fetch(fullRoute, opts);        
         return fetchPromise()
             .then(response => response.json());        
     }
 
-    GET(route, query) { return this.fetch(route, 'GET', query, true); }
-    POST(route, body) { return this.fetch(route, 'POST', body); }
-    PUT(route, body) { return this.fetch(route, 'PUT', body); }
-    DELETE(route, query) { return this.fetch(route, 'DELETE', query, true); }
 }
