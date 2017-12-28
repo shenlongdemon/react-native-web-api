@@ -1,6 +1,4 @@
 
-import { NativeModules } from 'react-native';
+import * as SLWebAPI from './webapi/SLWebAPI';
 
-const { SLWebApi } = NativeModules;
-
-export default SLWebApi;
+module.exports = MapView;
