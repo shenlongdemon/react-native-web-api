@@ -4,7 +4,9 @@ export default class SLWebAPI {
         if (!baseUrl) throw new Error('missing baseUrl');
         this.headers = {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization':'',
+            'Accept-Language': 'en-EN'
         };
         Object.assign(this.headers, headers);
         this.baseUrl = baseUrl;       
