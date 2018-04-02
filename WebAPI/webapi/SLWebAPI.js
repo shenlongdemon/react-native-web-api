@@ -12,8 +12,10 @@ export default class SLWebAPI {
             method : method,
             headers: optHeader
         };
-        Object.assign(opts, { body: JSON.stringify(body) });
-        const fetchPromise = () => fetch(fullRoute, opts);        
+        if (method === "POST" || method === "PUT"){
+            Object.assign(opts, { body: JSON.stringify(body) });
+        }
+        const fetchPromise = () => fetch(url, opts);        
         return fetchPromise()
             .then(response => response.json());  
     }
